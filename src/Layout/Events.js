@@ -108,22 +108,22 @@ function EventDetail(props) {
               </td>
               <td>
                 <th>
-                  HEADD
+                  Bin ID
             </th>
-              row
-            </td>
+                {row.details.find(x => x.format == 'incident_type').value}
+              </td>
               <td>
                 <th>
-                  HEADD
+                  Temperature
             </th>
-              row
-            </td>
+                {row.details.find(x => x.format == 'incident_type').value}
+              </td>
               <td>
                 <th>
-                  HEADD
+                  Action
             </th>
-              row
-            </td>
+                {row.details.find(x => x.format == 'incident_type').value}
+              </td>
 
             </tr>
           )}

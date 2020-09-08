@@ -2,44 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 
 
-import { Container, CardBody } from 'reactstrap';
 
-import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardImg, CardText, Row, Col, Media } from 'reactstrap';
+
+import { Input, Container, CardBody, TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardImg, CardText, Row, Col, Media, Modal, ModalHeader, ModalBody, Spinner } from 'reactstrap';
+
+
 import { example_response } from './../data'
 import classnames from 'classnames';
 import MapView from '../components/MapView';
-
-
-let markerData = function (location) {
-  return {
-    "venues": [
-      {
-        "description": "TEST",
-        "name": "NAME",
-        "geometry": [
-          location.latitude,
-          location.longitude
-        ]
-      },
-    ]
-  }
-}
-
-function formatDate(date) {
-  var d = new Date(date),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
-
-  if (month.length < 2)
-    month = '0' + month;
-  if (day.length < 2)
-    day = '0' + day;
-
-  var time = new Date(date).toISOString().split('T')[1].split('.')[0].split(':')
-
-  return [day, month, year].join('.') + ' ' + time[0] + ':' + time[1];
-}
 
 
 const whiteCard = {
@@ -56,11 +26,19 @@ const buttonStyle2 = {
 
 }
 
+
+
+
+
+
+
 function EventDetail(props) {
 
 
   const [detailSection, setDetailSection] = useState('Empty');
   const [activeTab, setActiveTab] = useState('1');
+  const [activeTabModal, setActiveTabModal] = useState('1');
+  const [loadingFinished, setLoadingFinished] = useState(true)
   const [location, setLocation] = useState(0)
 
   useEffect(() => {
@@ -70,6 +48,36 @@ function EventDetail(props) {
   const toggle = tab => {
     if (activeTab !== tab) setActiveTab(tab);
   }
+
+  const toggleTabModal = tabModal => {
+    if (activeTabModal !== tabModal) setActiveTabModal(tabModal);
+  }
+
+
+
+  const cardModal = {
+    width: '100%',
+    ':hover': {
+      backgroundColor: 'grey'
+    }
+  }
+
+  const modalStyle = {
+    padding: '5%'
+  }
+
+  const {
+    buttonLabel,
+    className
+  } = props;
+
+  const [modal, setModal] = useState(false);
+  const [modalLoading, setModalLoading] = useState(false);
+
+  const toggleModal = function () { setModal(!modal); }
+  const toggleModalNo = function () { setModal(!modal); }
+  const toggleModalLoading = function () { setModalLoading(!modalLoading); }
+
 
   const data = example_response.data
 
@@ -83,13 +91,13 @@ function EventDetail(props) {
         <br />
         <Row>
           <Col>
-            <Button style={buttonStyle}>No Action Needed</Button>{' '}
+            <Button style={buttonStyle} onClick={toggleModalNo}>No Action Needed</Button>{' '}
           </Col>
           <Col>
-            <Button style={buttonStyle2}>Take Action</Button>{' '}
+            <Button style={buttonStyle2} onClick={toggleModal}>Take Action</Button>{' '}
           </Col>
         </Row>
-<br />
+        <br />
         <div>
           <Nav tabs>
             <NavItem>
@@ -147,6 +155,118 @@ function EventDetail(props) {
         </div>
 
       </Container>
+      <Modal isOpen={modal} toggle={toggleModal} className={className} size="lg">
+
+        <ModalBody style={modalStyle}>
+          <Nav tabs>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTabModal === '1' })}
+                onClick={() => { toggleTabModal('1'); }}
+              >
+                SELECT ACTION
+          </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTabModal === '2' })}
+                onClick={() => { toggleTabModal('2'); }}
+              >
+                TAKE ACTION
+          </NavLink>
+            </NavItem>
+
+          </Nav>
+          <TabContent activeTab={activeTabModal}>
+            <TabPane tabId="1">
+              <br />
+              <Row>
+
+                <Card tag="a" className={cardModal} style={{
+                  cursor: 'pointer',
+                  width: '100%',
+                  margin: '2%',
+                  ':hover': {
+                    backgroundColor: 'grey'
+                  }
+                }} onClick={console.log('sf')} onhover>
+
+                  <CardBody>
+                    <CardTitle><b>Mark As Resolved</b></CardTitle>
+
+                    <CardText>Mark this event as resolved and enter the details of the resolution</CardText>
+
+                  </CardBody>
+                </Card>
+
+              </Row>
+              <br />
+              <Row> <Card tag="a" style={{
+                cursor: 'pointer',
+                width: '100%',
+                margin: '2%',
+                ':hover': {
+                  backgroundColor: 'grey'
+                }
+              }}>
+
+                <CardBody>
+                  <CardTitle><b>Change Asset</b></CardTitle>
+
+                  <CardText>Change the asset with another one</CardText>
+
+                </CardBody>
+
+              </Card></Row>
+              <br />
+              <Row>
+                <Col></Col>
+                <Col><Button style={buttonStyle2}>NEXT</Button></Col>
+                <Col></Col>
+              </Row>
+            </TabPane>
+            <TabPane tabId="2">
+
+              <br />
+
+
+
+              <p>
+                <b>Mark As Resolved</b>
+                <br />
+
+                    Mark this event as resolved and enter the details of the resolution
+                    </p>
+
+
+              <br />
+              <b>Resolution Detail*</b>
+              <Input type="textarea" name="text" id="exampleText" placeholder="Enter Resolution detail ..." />
+
+
+              <br />
+              <Row>
+                <Col></Col>
+                <Col> <Button style={buttonStyle} onClick={toggleModal}>Back</Button>{' '}</Col>
+                <Col>  <Button style={buttonStyle2} onClick={toggleModal && toggleModalLoading}>Take Action</Button>{' '}</Col>
+                <Col></Col>
+              </Row>
+
+            </TabPane>
+
+          </TabContent>
+
+        </ModalBody>
+
+      </Modal>
+      <Modal isOpen={modalLoading} toggle={toggleModalLoading} className="modal-dialog" style={{
+        width: '200px', height: '200px'
+      }}>
+        <ModalBody>
+
+          <Spinner style={{ width: '3rem', height: '3rem', color: '#3BA935' }} />{' '}
+        </ModalBody>
+      </Modal>
     </>
 
 
