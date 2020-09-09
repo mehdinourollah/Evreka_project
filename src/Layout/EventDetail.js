@@ -73,10 +73,16 @@ function EventDetail(props) {
 
   const [modal, setModal] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
+  const [OKModal, setOKModal] = useState(false)
 
   const toggleModal = function () { setModal(!modal); }
   const toggleModalNo = function () { setModal(!modal); }
-  const toggleModalLoading = function () { setModalLoading(!modalLoading); }
+  const toggleModalLoading = function () {
+    setModalLoading(!modalLoading);
+    setTimeout(() => {
+      setOKModal(true)
+    }, 2500);
+  }
 
 
   const data = example_response.data
@@ -133,8 +139,8 @@ function EventDetail(props) {
                     <Col>
                     </Col>
                   </Row>
-                  <h4>Tab 1 Contents</h4>
-                  {JSON.stringify(props.detailSection.details)}
+                  <h4></h4>
+                  {JSON.stringify(props.detailSection)}
                 </Col>
               </Row>
             </TabPane>
@@ -259,12 +265,33 @@ function EventDetail(props) {
         </ModalBody>
 
       </Modal>
-      <Modal isOpen={modalLoading} toggle={toggleModalLoading} className="modal-dialog" style={{
-        width: '200px', height: '200px'
-      }}>
-        <ModalBody>
+      <Modal isOpen={modalLoading} toggle={toggleModalLoading} className="modal-dialog"  >
+        <ModalBody style={{
+          width: '400px', height: '400px'
+        }}>
 
-          <Spinner style={{ width: '3rem', height: '3rem', color: '#3BA935' }} />{' '}
+
+          <Col></Col>
+          <Col>
+            {modalLoading && !OKModal ? (
+              <Spinner style={{ width: '7rem', height: '7rem', color: '#3BA935', fontSize: '2.5em', margin: '40% 50% 50% 50%' }} />)
+              : (<div >
+                <br />
+                <CardImg style={{ width: '100px', height: '100px', marginLeft: '50%' }} src='/images/checked.png' ></CardImg>
+                <br />
+                <br />
+                <p>
+                  <h2 style={{ color: '#3DA836', width: '400px' }}>ACTION HAS BEEN TAKEN!</h2>
+                </p>
+                <br />
+                <p>you can see the action details from details tab</p>
+              </div>)}
+
+          </Col>
+          <Col></Col>
+
+
+
         </ModalBody>
       </Modal>
     </>

@@ -63,7 +63,7 @@ const tableStyle = {
 
 }
 
-function EventDetail(props) {
+function Events(props) {
 
 
   const [detailSection, setDetailSection] = useState('Empty');
@@ -142,4 +142,4 @@ function EventDetail(props) {
   );
 }
 
-export default EventDetail;
+export default Events;
