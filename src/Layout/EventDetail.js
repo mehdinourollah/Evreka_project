@@ -45,7 +45,7 @@ function EventDetail(props) {
   useEffect(() => {
     setLocation(props.detailSection);
 
-  })
+  }, [props.detailSection])
   const toggle = tab => {
     if (activeTab !== tab) setActiveTab(tab);
   }
@@ -289,8 +289,10 @@ function EventDetail(props) {
               <br />
               <Row>
                 <Col></Col>
-                <Col> <Button style={buttonStyle} onClick={toggleModal}>Back</Button>{' '}</Col>
-                <Col>  <Button style={buttonStyle2} onClick={toggleModal && toggleModalLoading}>Take Action</Button>{' '}</Col>
+
+                <Col>
+                  <Button style={buttonStyle} onClick={toggleModal}>Back</Button>{' '}</Col>
+                <Col><Button style={buttonStyle2} onClick={toggleModal && toggleModalLoading}>Take Action</Button>{' '}</Col>
                 <Col></Col>
               </Row>
 
