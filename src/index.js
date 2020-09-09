@@ -1,7 +1,7 @@
 
 
 import 'bootstrap/dist/css/bootstrap.css';
-import './Frontend.css';
+import './index.css'
 import './App.css';
 
 import React from 'react';
@@ -16,9 +16,9 @@ import * as serviceWorker from './serviceWorker';
 
 
 ReactDOM.render(
-  <React.StrictMode>
+  <React.Fragment>
     <App />
-  </React.StrictMode>,
+  </React.Fragment>,
   document.getElementById('root')
 );
 

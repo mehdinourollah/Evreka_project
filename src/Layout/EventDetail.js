@@ -5,7 +5,7 @@ import AudioPlayer from 'react-audio-player';
 
 
 
-import { Input, Container, CardBody, TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardImg, CardText, Row, Col, Media, Modal, ModalHeader, ModalBody, Spinner } from 'reactstrap';
+import { Input, Container, CardBody, TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardImg, CardText, Row, Col, Modal, ModalBody, Spinner } from 'reactstrap';
 
 
 import { example_response } from './../data'
@@ -14,16 +14,19 @@ import MapView from '../components/MapView';
 
 
 const whiteCard = {
-  backgroundColor: 'white'
+  backgroundColor: 'white',
+  padding: '20px'
 }
 const buttonStyle = {
   backgroundColor: '#454F63',
-  width: '100%'
+  width: '80%',
+  fontWeight: 'bold'
 
 }
 const buttonStyle2 = {
   backgroundColor: '#3BA935',
-  width: '100%'
+  width: '80%',
+  fontWeight: 'bold'
 
 }
 
@@ -44,6 +47,7 @@ function EventDetail(props) {
 
   useEffect(() => {
     setLocation(props.detailSection);
+    setIsButtonsShown({ id: props.detailSection.id, status: true })
 
   }, [props.detailSection])
   const toggle = tab => {
@@ -56,28 +60,19 @@ function EventDetail(props) {
 
 
 
-  const cardModal = {
-    width: '100%',
-    ':hover': {
-      backgroundColor: 'grey'
-    }
-  }
 
   const modalStyle = {
     padding: '5%'
   }
 
-  const {
-    buttonLabel,
-    className
-  } = props;
+
 
   const [modal, setModal] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [OKModal, setOKModal] = useState(false)
 
   const toggleModal = function () { setModal(!modal); }
-  const toggleModalNo = function () { setModal(!modal); }
+
   const toggleModalLoading = function () {
     setModalLoading(!modalLoading);
     setTimeout(() => {
@@ -85,29 +80,88 @@ function EventDetail(props) {
     }, 2500);
   }
 
+  const [isButtonsShown, setIsButtonsShown] = useState({ id: props.detailSection.id, status: true })
+
+  function removeButtons() {
+    setIsButtonsShown({ id: props.detailSection.id, status: false })
+    // props.detailSection = 
+  }
+
   const openImageModal = function (url) {
 
   }
 
+  const [buttonResolvedState, setButtonResolvedState] = useState(true)
+  const clickOnResolved = function (arg) {
+    // console.log({arg})
+    if (arg == 1) {
+
+      setButtonResolvedState(!buttonResolvedState)
+      // setbuttonAssetState(false)
+    } else {
+      // setButtonResolvedState(false)
+      setbuttonAssetState(!buttonAssetState)
+    }
+  }
+
+  const [buttonAssetState, setbuttonAssetState] = useState(true)
+
+  const [resolutionText, setResolutionText] = useState()
+
+  const examineText = (text) => {
+    console.log({ len: text })
+    if (text.length > 300) {
+      console.log('err')
+
+    }
+    else {
+      toggleModalLoading();
+      toggleModal()
+    }
+    // setResolutionText(text.target.value)
+    // setResolutionText(text.target.value)
+    // toggleModal()
+  }
+
+  const setResolutionTextValue = (text) => {
+    setResolutionText(text)
+    console.log({ text, resolutionText })
+  }
+
+
+  const [name, setName] = useState('Sebastian');
+
+  const buttonResolvedStyle = {
+    color: 'red'
+  }
   const data = example_response.data
 
   return (
 
 
     <>
-      <h1 className="character-style-1">Event Details</h1>
-      <br />
+
       <Container style={whiteCard}>
         <br />
-        <Row>
-          <Col>
-            <Button style={buttonStyle} onClick={toggleModalNo}>No Action Needed</Button>{' '}
-          </Col>
-          <Col>
-            <Button style={buttonStyle2} onClick={toggleModal}>Take Action</Button>{' '}
-          </Col>
-        </Row>
-        <br />
+        {props.detailSection.details ? props.detailSection.details.find(x => x.title == 'Aksiyon').value == 'Aksiyon Gerekmiyor' || !isButtonsShown.status ? (<></>) : (
+          <>
+            <Row>
+
+
+              <>
+                <Col>
+                  <Button style={buttonStyle} onClick={removeButtons}>No Action Needed</Button>{' '}
+                </Col>
+                <Col>
+                  <Button style={buttonStyle2} onClick={toggleModal}>Take Action</Button>{' '}
+                </Col>
+              </>
+
+            </Row>
+            <br />
+          </>
+        ) : (<></>)}
+
         <div>
           <Nav tabs>
             <NavItem>
@@ -140,11 +194,7 @@ function EventDetail(props) {
               <Row>
                 <Col sm="12">
                   <Row>
-                    <Col>
-
-
-
-
+                    <Col style={{ textAlign: 'left', margin: '2%'}}>
                       {props.detailSection.details && props.detailSection.details.map((detail, index) => (
                         <div key={index}>
                           <b>{detail.title}</b>
@@ -152,12 +202,8 @@ function EventDetail(props) {
                           <p>{detail.value}</p>
                         </div>
                       ))}
-
-
                     </Col>
                   </Row>
-
-
                 </Col>
               </Row>
             </TabPane>
@@ -197,7 +243,7 @@ function EventDetail(props) {
         </div>
 
       </Container>
-      <Modal isOpen={modal} toggle={toggleModal} className={className} size="lg">
+      <Modal isOpen={modal} toggle={toggleModal} size="lg">
 
         <ModalBody style={modalStyle}>
           <Nav tabs>
@@ -212,7 +258,7 @@ function EventDetail(props) {
             <NavItem>
               <NavLink
                 className={classnames({ active: activeTabModal === '2' })}
-                onClick={() => { toggleTabModal('2'); }}
+
               >
                 TAKE ACTION
           </NavLink>
@@ -228,17 +274,18 @@ function EventDetail(props) {
                   cursor: 'pointer',
                   width: '100%',
                   margin: '2%',
-                  ':hover': {
+                  '&:hover': {
                     backgroundColor: 'grey'
                   }
-                }} onhover>
+                }}>
+                  <div onClick={() => clickOnResolved(1)}>
+                    <CardBody style={{ backgroundColor: buttonResolvedState ? 'white' : '#454F63' }}>
+                      <CardTitle><b>Mark As Resolved</b></CardTitle>
 
-                  <CardBody>
-                    <CardTitle><b>Mark As Resolved</b></CardTitle>
+                      <CardText>Mark this event as resolved and enter the details of the resolution</CardText>
 
-                    <CardText>Mark this event as resolved and enter the details of the resolution</CardText>
-
-                  </CardBody>
+                    </CardBody>
+                  </div>
                 </Card>
 
               </Row>
@@ -252,18 +299,19 @@ function EventDetail(props) {
                 }
               }}>
 
-                <CardBody>
-                  <CardTitle><b>Change Asset</b></CardTitle>
+                <div onClick={(evt) => clickOnResolved(2)}>
+                  <CardBody style={{ backgroundColor: buttonAssetState ? 'white' : '#454F63' }}>
+                    <CardTitle><b>Change Asset</b></CardTitle>
 
-                  <CardText>Change the asset with another one</CardText>
+                    <CardText>Change the asset with another one</CardText>
 
-                </CardBody>
-
+                  </CardBody>
+                </div>
               </Card></Row>
               <br />
               <Row>
                 <Col></Col>
-                <Col><Button style={buttonStyle2}>NEXT</Button></Col>
+                <Col><Button disabled={buttonAssetState && buttonResolvedState} style={buttonStyle2} onClick={() => { toggleTabModal('2'); }}>NEXT</Button></Col>
                 <Col></Col>
               </Row>
             </TabPane>
@@ -283,16 +331,18 @@ function EventDetail(props) {
 
               <br />
               <b>Resolution Detail*</b>
-              <Input type="textarea" name="text" id="exampleText" placeholder="Enter Resolution detail ..." />
+
+              <Input type="textarea" name="text" id="exampleText" placeholder="Enter Resolution detail ..." maxLength="300" rows="4" cols="50" value={resolutionText}
+                onChange={e => setResolutionText(e.target.value)} />
 
 
               <br />
               <Row>
                 <Col></Col>
 
-                <Col>
-                  <Button style={buttonStyle} onClick={toggleModal}>Back</Button>{' '}</Col>
-                <Col><Button style={buttonStyle2} onClick={toggleModal && toggleModalLoading}>Take Action</Button>{' '}</Col>
+                <Col>   <Button style={buttonStyle} onClick={() => { toggleTabModal('1'); }}>Back</Button>{' '}</Col>
+                <Col><Button style={buttonStyle2} onClick={(event) => examineText(resolutionText)}>Take Action</Button>{' '}</Col>
+
                 <Col></Col>
               </Row>
 
@@ -318,9 +368,9 @@ function EventDetail(props) {
                 <CardImg style={{ width: '100px', height: '100px', marginLeft: '50%' }} src='/images/checked.png' ></CardImg>
                 <br />
                 <br />
-                <p>
-                  <h2 style={{ color: '#3DA836', width: '400px' }}>ACTION HAS BEEN TAKEN!</h2>
-                </p>
+
+                <center><h2 style={{ color: '#3DA836', width: '400px' }}>ACTION HAS BEEN TAKEN!</h2></center>
+
                 <br />
                 <p>you can see the action details from details tab</p>
               </div>)}
