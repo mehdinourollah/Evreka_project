@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AudioPlayer from 'react-audio-player';
 
 
 
@@ -84,6 +85,9 @@ function EventDetail(props) {
     }, 2500);
   }
 
+  const openImageModal = function (url) {
+
+  }
 
   const data = example_response.data
 
@@ -137,10 +141,23 @@ function EventDetail(props) {
                 <Col sm="12">
                   <Row>
                     <Col>
+
+
+
+
+                      {props.detailSection.details && props.detailSection.details.map((detail, index) => (
+                        <div key={index}>
+                          <b>{detail.title}</b>
+
+                          <p>{detail.value}</p>
+                        </div>
+                      ))}
+
+
                     </Col>
                   </Row>
-                  <h4></h4>
-                  {JSON.stringify(props.detailSection)}
+
+
                 </Col>
               </Row>
             </TabPane>
@@ -153,8 +170,27 @@ function EventDetail(props) {
               </CardBody>
             </TabPane>
             <TabPane tabId="3">
-              <CardImg top width="100%" src="/images/garbage-bin.png" alt="garbage bin" />
+              <div style={{ padding: '20px' }} >
+                {props.detailSection.media ?
+                  props.detailSection.media[0].type == 'image' ?
+                    (<>
 
+                      <CardImg top width="100%" src={props.detailSection.media[0].url} alt="No Image" onClick={console.log('OKKKKKKKKKKKKKKK')} />
+                    </>
+                    ) : props.detailSection.media[0].type == 'audio' ?
+                      (<>
+                        <AudioPlayer
+                          src={props.detailSection.media[0].url}
+                          autoPlay
+                          controls
+                        />
+
+                      </>) : (<>
+                        No Media Content
+                    </>) : (<>
+                    No Media Content
+                    </>)}
+              </div>
 
             </TabPane>
           </TabContent>
@@ -188,14 +224,14 @@ function EventDetail(props) {
               <br />
               <Row>
 
-                <Card tag="a" className={cardModal} style={{
+                <Card tag="a" style={{
                   cursor: 'pointer',
                   width: '100%',
                   margin: '2%',
                   ':hover': {
                     backgroundColor: 'grey'
                   }
-                }} onClick={console.log('sf')} onhover>
+                }} onhover>
 
                   <CardBody>
                     <CardTitle><b>Mark As Resolved</b></CardTitle>

@@ -4,7 +4,7 @@ import { Table, Row, Col, Button } from 'reactstrap';
 
 import { example_response } from './../data'
 import EventDetail from './EventDetail'
-import Events from './Events'
+
 
 function formatDate(date) {
   var d = new Date(date),
@@ -61,8 +61,63 @@ function Content(props) {
         <Row >
           <Col xs="6" sm="8">
 
-         <Events />
+            {/* ////////////////////// */}
 
+            <h1 className="character-style-1"> Events</h1>
+
+            <br />
+            <div className='flex-vertical'>
+              <Table responsive hover className='flags-table'>
+                <tbody >
+                  {data.map((row, index) =>
+                    <tr key={index} onClick={() => {
+                      setDetailSection(row);
+
+                    }}>
+
+                      {row.details.map((detail, index) =>
+                        (
+
+                          <td key={index}>
+                            <b>{detail.title}</b>
+                            <br></br>
+                            {/* {formatDate(row.details.find(x => x.format == 'date').value)} */}
+                            {detail.value}
+                          </td>
+                        ))}
+
+                      
+                        {/* <b>  Type</b>
+                        <br></br>
+
+                        {row.details.find(x => x.format == 'incident_type').value}
+                      </td>
+                      <td>
+                        <b>Bin ID</b>
+                        <br></br>
+
+                        {row.details.find(x => x.format == 'incident_type').value}
+                      </td>
+                      <td>
+                        <b>Temperature</b>
+                        <br></br>
+
+
+                        {row.details.find(x => x.format == 'incident_type').value}
+                      </td>
+                      <td>
+                        <th>
+                          Action
+      </th>
+                        {row.details.find(x => x.format == 'incident_type').value}
+                      </td> */}
+
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+              {/* ///////////////////////////// */}
+            </div>
           </Col>
           <Col sm="4">
             <EventDetail detailSection={detailSection} />
@@ -72,7 +127,7 @@ function Content(props) {
       </Container>
     </>
 
-  
+
 
 
 

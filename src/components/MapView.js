@@ -6,7 +6,7 @@ import Markers from './VenueMarkers';
 
 function MapView(props) {
 
-  console.log({ mapppppppppp: props.data.location })
+  
 
 
   const [currentLocation, setCurrentLocation] = useState({ lat: 39.9229025, lng: 32.8419197 })
