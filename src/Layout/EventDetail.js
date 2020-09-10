@@ -49,6 +49,7 @@ function EventDetail(props) {
     setLocation(props.detailSection);
     setIsButtonsShown({ id: props.detailSection.id, status: true })
 
+
   }, [props.detailSection])
   const toggle = tab => {
     if (activeTab !== tab) setActiveTab(tab);
@@ -70,14 +71,24 @@ function EventDetail(props) {
   const [modal, setModal] = useState(false);
   const [modalLoading, setModalLoading] = useState(false);
   const [OKModal, setOKModal] = useState(false)
+  const [NOK, setNOK] = useState(false)
+  const toggleModal = function () {
+    setModal(!modal);
+    setOKModal(false)
+  }
 
-  const toggleModal = function () { setModal(!modal); }
+  const toggleModalLoading = function (arg) {
 
-  const toggleModalLoading = function () {
     setModalLoading(!modalLoading);
+    if (arg == 'NOK') {
+      setNOK(true)
+    }
+    else {
+      setNOK(false)
+    }
     setTimeout(() => {
       setOKModal(true)
-    }, 2500);
+    }, 1000);
   }
 
   const [isButtonsShown, setIsButtonsShown] = useState({ id: props.detailSection.id, status: true })
@@ -86,8 +97,15 @@ function EventDetail(props) {
     setIsButtonsShown({ id: props.detailSection.id, status: false })
     // props.detailSection = 
   }
+  const [imageURL, setImageURL] = useState('')
 
-  const openImageModal = function (url) {
+  const [imageModal, setImageModal] = useState(false)
+
+  const toggleImageModal = function () { setImageModal(!imageModal); }
+
+  const openImageModal = (url) => {
+    setImageURL(url)
+    toggleImageModal()
 
   }
 
@@ -109,13 +127,15 @@ function EventDetail(props) {
   const [resolutionText, setResolutionText] = useState()
 
   const examineText = (text) => {
-    console.log({ len: text })
-    if (text.length > 300) {
-      console.log('err')
 
+    if (!text || text.length > 300) {
+
+      toggleModalLoading('NOK');
+      toggleModal()
     }
     else {
-      toggleModalLoading();
+
+      toggleModalLoading('OK');
       toggleModal()
     }
     // setResolutionText(text.target.value)
@@ -194,7 +214,7 @@ function EventDetail(props) {
               <Row>
                 <Col sm="12">
                   <Row>
-                    <Col style={{ textAlign: 'left', margin: '2%'}}>
+                    <Col style={{ textAlign: 'left', margin: '2%' }}>
                       {props.detailSection.details && props.detailSection.details.map((detail, index) => (
                         <div key={index}>
                           <b>{detail.title}</b>
@@ -221,21 +241,12 @@ function EventDetail(props) {
                   props.detailSection.media[0].type == 'image' ?
                     (<>
 
-                      <CardImg top width="100%" src={props.detailSection.media[0].url} alt="No Image" onClick={console.log('OKKKKKKKKKKKKKKK')} />
+                      <CardImg top width="100%" src={props.detailSection.media[0].url} alt="No Image" onClick={() => openImageModal(props.detailSection.media[0].url)} />
                     </>
-                    ) : props.detailSection.media[0].type == 'audio' ?
-                      (<>
-                        <AudioPlayer
-                          src={props.detailSection.media[0].url}
-                          autoPlay
-                          controls
-                        />
 
-                      </>) : (<>
-                        No Media Content
-                    </>) : (<>
-                    No Media Content
-                    </>)}
+                    ) : (<>
+                      No Media Content
+                    </>) : (<></>)}
               </div>
 
             </TabPane>
@@ -362,18 +373,33 @@ function EventDetail(props) {
           <Col></Col>
           <Col>
             {modalLoading && !OKModal ? (
-              <Spinner style={{ width: '7rem', height: '7rem', color: '#3BA935', fontSize: '2.5em', margin: '40% 50% 50% 50%' }} />)
-              : (<div >
-                <br />
-                <CardImg style={{ width: '100px', height: '100px', marginLeft: '50%' }} src='/images/checked.png' ></CardImg>
-                <br />
-                <br />
+              <Spinner style={{ width: '7rem', height: '7rem', color: '#3BA935', fontSize: '2.5em', margin: '50% 50% 50% 50%' }} />)
+              : !NOK ?
+                (<div >
+                  <br />
+                  <CardImg style={{ width: '100px', height: '100px', marginLeft: '50%' }} src='/images/checked.png' ></CardImg>
+                  <br />
+                  <br />
 
-                <center><h2 style={{ color: '#3DA836', width: '400px' }}>ACTION HAS BEEN TAKEN!</h2></center>
+                  <center><h2 style={{ color: '#3DA836', width: '400px' }}>ACTION HAS BEEN TAKEN!</h2></center>
 
-                <br />
-                <p>you can see the action details from details tab</p>
-              </div>)}
+                  <br />
+                  <p>you can see the action details from details tab</p>
+                </div>)
+                :
+                (<>
+                  <div >
+                    <br />
+                    <CardImg style={{ width: '100px', height: '100px', marginLeft: '50%' }} src='/images/problem.png' ></CardImg>
+                    <br />
+                    <br />
+
+                    <center><h2 style={{ color: '#D92323', width: '400px' }}>A PROBLEM OCCURED!</h2></center>
+
+                    <br />
+                    <p>We cannot continue due to a problem.<br></br>Please try again later.</p>
+                  </div>
+                </>)}
 
           </Col>
           <Col></Col>
@@ -382,6 +408,16 @@ function EventDetail(props) {
 
         </ModalBody>
       </Modal>
+
+
+
+      <Modal isOpen={imageModal} toggle={toggleImageModal} className="modal-dialog"  >
+        <ModalBody style={{ minHeight: 0, width: 'fit-content' }}>
+          {/* <CardImg top width="100%" src={imageURL}></CardImg> */}
+          <img src={imageURL} ></img>
+        </ModalBody>
+      </Modal>
+
     </>
 
 

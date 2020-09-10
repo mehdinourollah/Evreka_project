@@ -36,7 +36,7 @@ function Content(props) {
 
 
   const actionDictionary = [
-    { tr: 'Aksiyon Gerekmiyor', en: 'No Action required' },
+    { tr: 'Aksiyon Gerekmiyor', en: 'No Action Needed' },
     { tr: 'Çözüm Bildir', en: 'Report a Solution' }, { tr: '-', en: '-' }
   ]
 
