@@ -31,11 +31,6 @@ const buttonStyle2 = {
 }
 
 
-
-
-
-
-
 function EventDetail(props) {
 
 
@@ -95,6 +90,8 @@ function EventDetail(props) {
 
   function removeButtons() {
     setIsButtonsShown({ id: props.detailSection.id, status: false })
+    props.data.find(x => x.id == props.detailSection.id).details.find(y => y.title == 'Aksiyon').value = 'Aksiyon Gerekmiyor'
+    // handleDataChange()
     // props.detailSection = 
   }
   const [imageURL, setImageURL] = useState('')
@@ -143,31 +140,18 @@ function EventDetail(props) {
     // toggleModal()
   }
 
-  const setResolutionTextValue = (text) => {
-    setResolutionText(text)
-    console.log({ text, resolutionText })
-  }
 
 
-  const [name, setName] = useState('Sebastian');
 
-  const buttonResolvedStyle = {
-    color: 'red'
-  }
-  const data = example_response.data
+  
 
   return (
-
-
     <>
-
       <Container style={whiteCard}>
         <br />
         {props.detailSection.details ? props.detailSection.details.find(x => x.title == 'Aksiyon').value == 'Aksiyon Gerekmiyor' || !isButtonsShown.status ? (<></>) : (
           <>
             <Row>
-
-
               <>
                 <Col>
                   <Button style={buttonStyle} onClick={removeButtons}>No Action Needed</Button>{' '}
@@ -176,7 +160,6 @@ function EventDetail(props) {
                   <Button style={buttonStyle2} onClick={toggleModal}>Take Action</Button>{' '}
                 </Col>
               </>
-
             </Row>
             <br />
           </>

@@ -26,11 +26,11 @@ function formatDate(date) {
 function Content(props) {
   const [detailSection, setDetailSection] = useState('Empty');
   const [isDetailShown, setIsdetailShown] = useState(false)
-  const data = example_response.data
+  const [data, setData] = useState(example_response.data)
   const [selectedRow, setSelectedRow] = useState({})
 
   const setSelected = (row, index) => {
-    console.log({ row, index })
+    // console.log({ row, index })
     setSelectedRow({ id: row.id })
   }
 
@@ -40,8 +40,17 @@ function Content(props) {
     { tr: 'Çözüm Bildir', en: 'Report a Solution' }, { tr: '-', en: '-' }
   ]
 
+  function handleDataChange(newValue) {
+    console.log({ newValue })
+    setData(newValue)
 
 
+  }
+
+
+  useEffect(() => {
+    // setData(data)
+  }, [data])
 
   return (
 
@@ -160,7 +169,7 @@ function Content(props) {
             <h1 className="character-style-1">Event Details</h1>
             <br />
             {isDetailShown && (
-              <EventDetail detailSection={detailSection} />
+              <EventDetail data={data} onChange={handleDataChange} detailSection={detailSection} />
             )}
           </Col>
         </Row>
