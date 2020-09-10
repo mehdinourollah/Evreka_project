@@ -10,17 +10,17 @@ body {
 .leaflet-container {
   width: 100%;
   height: 50vh;
-  
 }
-
 
 .App {
   height: 100vh;
 }
 
-.card a:hover {
-  background-color: grey;
-}
+/* .card-body :hover{
+  background-color: #EBECEF;
+} */
+
+
 
 :root {
   /* Colors: */
@@ -142,11 +142,9 @@ tbody {
   /* background-color: blue; */
 }
 
-
-.modal-content{
+.modal-content {
   width: fit-content;
 }
-
 
 #footer {
   height: 0;

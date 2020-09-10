@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useReducer } from 'react';
 import { Container, Card, CardBody } from 'reactstrap';
 import { Table, Row, Col, Button } from 'reactstrap';
 
@@ -34,6 +34,7 @@ function Content(props) {
     setSelectedRow({ id: row.id })
   }
 
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   const actionDictionary = [
     { tr: 'Aksiyon Gerekmiyor', en: 'No Action Needed' },
@@ -41,15 +42,17 @@ function Content(props) {
   ]
 
   function handleDataChange(newValue) {
+    console.log('CHANGEDDDDDDDD')
     console.log({ newValue })
     setData(newValue)
-
+forceUpdate()
 
   }
 
+  
 
   useEffect(() => {
-    // setData(data)
+    forceUpdate()
   }, [data])
 
   return (
@@ -166,8 +169,7 @@ function Content(props) {
             </div>
           </Col>
           <Col sm="4">
-            <h1 className="character-style-1">Event Details</h1>
-            <br />
+           
             {isDetailShown && (
               <EventDetail data={data} onChange={handleDataChange} detailSection={detailSection} />
             )}
