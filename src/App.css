@@ -132,12 +132,12 @@ tbody {
 }
 
 #dialog-window {
-  height: 80vh;
+  height: 100vh;
   /* border: 1px black solid; */
 }
 
 #scrollable-content {
-  height: 80vh;
+  height: 100vh;
   overflow: auto;
   /* background-color: blue; */
 }

@@ -19,13 +19,13 @@ const whiteCard = {
 }
 const buttonStyle = {
   backgroundColor: '#454F63',
-  width: '80%',
+  // width: '90%',
   fontWeight: 'bold'
 
 }
 const buttonStyle2 = {
   backgroundColor: '#3BA935',
-  width: '80%',
+  // width: '90%',
   fontWeight: 'bold'
 
 }
